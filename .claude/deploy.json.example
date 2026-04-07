@@ -1,0 +1,7 @@
+{
+  "__comment": "Copy to .claude/deploy.json and customize. Used by /landed.",
+  "environments": [
+    {"name": "dev", "workflow": "deploy-dev.yml"},
+    {"name": "staging", "workflow": "deploy-staging.yml", "health_check": "https://staging.example.com/health"}
+  ]
+}

@@ -1,10 +1,10 @@
-"""Tests for .claude/rules/ -- validates rule files exist and have correct structure."""
+"""Tests for pyclaude_forge data/rules/ -- validates rule files exist and have correct structure."""
 
 from pathlib import Path
 
 import pytest
 
-RULES_DIR = Path(__file__).parent.parent / ".claude" / "rules"
+RULES_DIR = Path(__file__).parent.parent / "src" / "pyclaude_forge" / "data" / "rules"
 
 ALL_RULES = [
     "architecture-review.md",

@@ -1,11 +1,11 @@
-"""Tests for .claude/agents/ -- validates all agent files have correct frontmatter and structure."""
+"""Tests for pyclaude_forge data/agents/ -- validates all agent files have correct frontmatter and structure."""
 
 import re
 from pathlib import Path
 
 import pytest
 
-AGENTS_DIR = Path(__file__).parent.parent / ".claude" / "agents"
+AGENTS_DIR = Path(__file__).parent.parent / "src" / "pyclaude_forge" / "data" / "agents"
 
 ALL_AGENTS = [
     "code-quality-validator.md",

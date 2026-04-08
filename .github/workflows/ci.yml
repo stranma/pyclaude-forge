@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: ">=0.5.0"
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Install package
+        run: uv pip install -e .
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Format check
+        run: uv run ruff format --check .
+
+      - name: Test
+        run: uv run pytest -v
+
+  validate-configs:
+    name: Validate Configs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Shellcheck hooks
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: src/pyclaude_forge/data/hooks
+
+      - name: Validate settings.json
+        run: python -m json.tool src/pyclaude_forge/data/settings.json > /dev/null
+
+  package-test:
+    name: Package Install Test
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: ">=0.5.0"
+
+      - name: Build and install package
+        run: |
+          uv venv
+          uv pip install .
+
+      - name: Test local install
+        run: |
+          cd "$(mktemp -d)"
+          uv run --no-project pyclaude-forge install
+          test -f .claude/.pyclaude-forge-manifest.json
+          test -f .claude/settings.json
+          test -f .claude/skills/sync/SKILL.md
+          echo "Local install: OK"
+
+      - name: Test uninstall
+        run: |
+          cd "$(mktemp -d)"
+          uv run --no-project pyclaude-forge install
+          uv run --no-project pyclaude-forge uninstall
+          test ! -f .claude/.pyclaude-forge-manifest.json
+          echo "Uninstall: OK"
+
+      - name: Test global install
+        run: |
+          uv run --no-project pyclaude-forge install --global
+          test -f ~/.claude/.pyclaude-forge-manifest.json
+          echo "Global install: OK"
+          uv run --no-project pyclaude-forge uninstall --global
+          echo "Global uninstall: OK"

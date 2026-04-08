@@ -1,13 +1,10 @@
 # CLAUDE.md
 
-## Development Process
-
-Use `/sync` before starting work, `/design` to formalize a plan, `/done` when finished, and `/landed` after the PR merges. Before creating any plan, read `docs/DEVELOPMENT_PROCESS.md` first.
-
 ## Development Commands
 
 - Install dependencies: `uv sync --group dev`
-- Run tests: `uv run pytest -v`
+- Install package (editable): `pip install -e .`
+- Run tests: `python -m pytest -v`
 - Lint: `uv run ruff check .`
 - Format: `uv run ruff format .`
 - Type check: `uv run pyright`

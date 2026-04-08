@@ -1,10 +1,10 @@
-"""Tests for .claude/skills/ -- validates skill files exist and have correct structure."""
+"""Tests for pyclaude_forge data/skills/ -- validates skill files exist and have correct structure."""
 
 from pathlib import Path
 
 import pytest
 
-SKILLS_DIR = Path(__file__).parent.parent / ".claude" / "skills"
+SKILLS_DIR = Path(__file__).parent.parent / "src" / "pyclaude_forge" / "data" / "skills"
 
 ALL_SKILLS = [
     "sync",
